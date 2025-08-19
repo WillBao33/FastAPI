@@ -12,6 +12,7 @@ class Users(Base):
     hashed_password = Column(String) # encrypting a password that cannot be unencrypted
     is_active = Column(Boolean, default=True)
     role = Column(String)
+    phone_number = Column(String)
 
 class Todos(Base):
     __tablename__ = "todos" # name the table in the database
