@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Path, APIRouter
 from starlette import status
-from models import Todos
+from models import Todos, Users
 from typing import Annotated
 from database import SessionLocal
 from sqlalchemy.orm import Session
@@ -39,4 +39,15 @@ async def delete_todo(user: user_dependency, db: db_dependency, todo_id: int = P
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not found')
 
     db.query(Todos).filter(Todos.id == todo_id).delete()
+    db.commit()
+
+@router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(user: user_dependency, db: db_dependency, user_id: int = Path(gt=0)):
+    if user is None or user.get('user_role') != 'Admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Not authorized')
+    user_model = db.query(Users).filter(Users.id == user_id).first()
+    if user_model is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Not found')
+
+    db.query(Users).filter(Users.id == user_id).delete()
     db.commit()
