@@ -14,6 +14,7 @@ class Users(Base):
     role = Column(String)
     phone_number = Column(String)
 
+
 class Todos(Base):
     __tablename__ = "todos" # name the table in the database
     id = Column(Integer, primary_key=True, index=True) # indexable
