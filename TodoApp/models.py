@@ -1,5 +1,5 @@
 # actual record inside a database table
-from database import Base
+from .database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
 class Users(Base):

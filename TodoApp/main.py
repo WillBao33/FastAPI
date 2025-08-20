@@ -1,12 +1,17 @@
 from fastapi import FastAPI
-import models
-import routers
-from database import engine
-from routers import auth, todos, admin, users
+from .models import Base
+from .database import engine
+from .routers import auth, todos, admin, users
 
 app = FastAPI()
 
-models.Base.metadata.create_all(bind=engine) # this creates everything from database.py and models.py, but it won't run if this todos.db already exists
+Base.metadata.create_all(bind=engine) # this creates everything from database.py and models.py, but it won't run if this todos.db already exists
+
+
+@app.get("/healthy")
+def health_check():
+    return {'status': 'healthy'}
+
 
 
 app.include_router(auth.router)
