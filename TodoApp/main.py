@@ -3,12 +3,15 @@ from .models import Base
 from .database import engine
 from .routers import auth, todos, admin, users
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine) # this creates everything from database.py and models.py, but it won't run if this todos.db already exists
 
 templates = Jinja2Templates(directory='TodoApp/templates')
+
+app.mount("/static", StaticFiles(directory="TodoApp/static"), name='static')
 
 
 @app.get('/')
