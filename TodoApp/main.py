@@ -2,21 +2,21 @@ from fastapi import FastAPI, Request
 from .models import Base
 from .database import engine
 from .routers import auth, todos, admin, users
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi import status
+from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine) # this creates everything from database.py and models.py, but it won't run if this todos.db already exists
 
-templates = Jinja2Templates(directory='TodoApp/templates')
 
 app.mount("/static", StaticFiles(directory="TodoApp/static"), name='static')
 
 
 @app.get('/')
 def test(request: Request):
-    return templates.TemplateResponse('home.html', {'request': request})
+    return RedirectResponse(url="/todos/todo-page", status_code=status.HTTP_302_FOUND)
 
 
 @app.get("/healthy")
